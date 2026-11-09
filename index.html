@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Golf Stats Tracker: find out where you're really losing shots. Fairways, greens, putts, Stableford, trophies and a coach report. No ads, no subscription.">
+<meta property="og:title" content="Golf Stats Tracker">
+<meta property="og:description" content="Find out where you're really losing shots. No ads, no subscription.">
+<meta name="theme-color" content="#16261E">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>Golf Stats Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap">
+<style>
+/* Layout: one narrow column like a phone scorecard; brand dark green throughout (single deliberate theme). */
+:root{
+  --pine:#16261E; --pine-2:#1E3329; --line:#2F4A3C; --leaf:#4FB67F; --leaf-d:#2F8A5B;
+  --chalk:#EAF0E4; --mist:#A9BDB0; --flag:#E8B422; --bad:#E07A5F;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"Bricolage Grotesque",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+html{background:var(--pine)}
+body{background:var(--pine);color:var(--chalk);font-family:var(--body);font-size:17px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 40px}
+.wrap{max-width:460px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+.brand{display:flex;align-items:center;gap:14px}
+.brand svg{width:64px;height:64px;flex-shrink:0;border-radius:15px;box-shadow:0 0 0 1px var(--line),0 6px 18px rgba(0,0,0,.35)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(30px,8vw,38px);line-height:1.05;margin:0;letter-spacing:-.02em;text-wrap:balance}
+.tag{font-size:20px;line-height:1.35;margin:0;text-wrap:balance}
+.tag b{color:var(--leaf);font-weight:700}
+.pill{display:inline-flex;gap:8px;align-items:center;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--pine);background:var(--flag);border-radius:999px;padding:4px 12px;align-self:flex-start}
+.get{display:flex;flex-direction:column;gap:10px}
+.btn{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--chalk);background:var(--pine-2);border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;transition:border-color .15s,transform .15s}
+.btn:hover{border-color:var(--leaf)}
+.btn:focus-visible{outline:3px solid var(--flag);outline-offset:2px}
+.btn.primary{background:var(--leaf-d);border-color:var(--leaf)}
+.btn .ico{width:34px;height:34px;flex-shrink:0;display:grid;place-items:center;border-radius:9px;background:rgba(0,0,0,.22);font-size:19px}
+.btn .t{display:flex;flex-direction:column;min-width:0}
+.btn small{font-size:13px;color:var(--mist)}
+.btn.primary small{color:#D9EEDF}
+.btn strong{font-size:18px;font-weight:700}
+.btn .go{margin-left:auto;font-size:22px;opacity:.8}
+.note{font-size:14px;color:var(--mist);margin:0}
+.card{background:var(--pine-2);border:1.5px solid var(--line);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.card h2{font-family:var(--display);font-size:15px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mist);margin:0}
+.leak{display:grid;grid-template-columns:120px 1fr 34px;gap:10px;align-items:center;font-size:15px}
+.leak i{display:block;height:10px;border-radius:5px;background:var(--bad)}
+.leak span:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--bad)}
+.medals{display:flex;gap:8px;flex-wrap:wrap}
+.medals span{font-size:14px;border:1px solid var(--line);border-radius:999px;padding:3px 10px;background:rgba(0,0,0,.18)}
+ul.feat{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+ul.feat li{display:grid;grid-template-columns:22px 1fr;gap:8px;font-size:16px}
+ul.feat li::before{content:"";width:10px;height:10px;margin-top:8px;border-radius:50%;background:var(--leaf)}
+.price{display:flex;gap:10px;flex-wrap:wrap}
+.price div{flex:1 1 120px;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px}
+.price b{display:block;font-size:22px;font-family:var(--display)}
+.price span{font-size:13px;color:var(--mist)}
+footer{font-size:13px;color:var(--mist);text-align:center}
+@media (prefers-reduced-motion:reduce){.btn{transition:none}}
+</style>
+<style>*{box-sizing:border-box}body{margin:0}</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="brand">
+    <svg viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" fill="#16261E"/><rect x="120" y="396" width="272" height="14" rx="7" fill="#EAF0E4" opacity=".4"/><rect x="132" y="310" width="64" height="86" rx="10" fill="#2F8A5B"/><rect x="224" y="250" width="64" height="146" rx="10" fill="#4FB67F"/><rect x="316" y="190" width="64" height="206" rx="10" fill="#EAF0E4"/><rect x="344" y="78" width="8" height="112" rx="4" fill="#EAF0E4"/><path d="M352 80 L440 112 L352 144 Z" fill="#E8B422"/></svg>
+    <h1>Golf Stats Tracker</h1>
+  </div>
+
+  <p class="tag">Find out where you&rsquo;re really losing shots. <b>No ads, no subscription.</b></p>
+
+  <span class="pill" id="status">Coming soon to the stores</span>
+
+  <div class="get" id="get"></div>
+  <p class="note" id="getnote"></p>
+
+  <div class="card" aria-label="Example from the app">
+    <h2>Where you lose shots <span style="text-transform:none;letter-spacing:0">(example)</span></h2>
+    <div class="leak"><span>Missed greens</span><i style="width:100%"></i><span>7.8</span></div>
+    <div class="leak"><span>Missed fairways</span><i style="width:40%"></i><span>3.1</span></div>
+    <div class="leak"><span>3-putts</span><i style="width:12%"></i><span>0.9</span></div>
+    <p class="note">Shots lost per 18 holes, worked out from your own rounds, with tips on what to practise.</p>
+  </div>
+
+  <ul class="feat">
+    <li>Log a hole in seconds: tee shot, approach, chip and putts, or quick entry.</li>
+    <li>Stableford points, fairways, greens in regulation, up and downs and putts.</li>
+    <li>Trophies for personal bests, plus Eclectic medals for every course you play.</li>
+    <li>Send your coach a tidy PDF report before your next lesson.</li>
+    <li>Works offline on the course. Your rounds stay on your phone.</li>
+  </ul>
+
+  <div class="card">
+    <h2>Eclectic medals</h2>
+    <div class="medals"><span>&#x1F949; Bronze &middot; all bogeys</span><span>&#x1F948; Silver &middot; all pars</span><span>&#x1F947; Gold &middot; all birdies</span><span>&#x1F48E; Platinum &middot; all eagles</span></div>
+    <p class="note">Your best score on each hole across every round at a course.</p>
+  </div>
+
+  <div class="price">
+    <div><b>3 rounds</b><span>free to try</span></div>
+    <div><b>A$4.99</b><span>once, to unlock for good</span></div>
+  </div>
+
+  <footer>Made in Brisbane by Kifty Productions</footer>
+</div>
+
+<script>
+// Store links. When a store listing goes public, set its "live" to true.
+var STORES={
+  ios:{live:false,url:'https://apps.apple.com/app/id6832140886',test:'https://testflight.apple.com/join/cRTyP8GH',name:'iPhone',store:'App Store',ico:''},
+  android:{live:false,url:'https://play.google.com/store/apps/details?id=com.kiftyproductions.golfscorecard',test:'https://play.google.com/apps/testing/com.kiftyproductions.golfscorecard',name:'Android',store:'Google Play',ico:'▶'}
+};
+(function(){
+  var ua=navigator.userAgent||'',isIOS=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&'ontouchend' in document),isAnd=/Android/.test(ua);
+  var order=isAnd?['android','ios']:['ios','android'];
+  var anyLive=STORES.ios.live||STORES.android.live;
+  var get=document.getElementById('get'),note=document.getElementById('getnote'),st=document.getElementById('status');
+  st.textContent=STORES.ios.live&&STORES.android.live?'Available now':anyLive?'Available on '+(STORES.ios.live?'iPhone':'Android')+', coming soon on '+(STORES.ios.live?'Android':'iPhone'):'Coming soon · testing now';
+  order.forEach(function(k,i){var s=STORES[k],mine=(k==='ios'&&isIOS)||(k==='android'&&isAnd)||(!isIOS&&!isAnd&&i===0);
+    var a=document.createElement('a');a.className='btn'+(mine?' primary':'');a.href=s.live?s.url:s.test;a.target='_blank';a.rel='noopener';
+    var ico=document.createElement('span');ico.className='ico';ico.setAttribute('aria-hidden','true');ico.textContent=k==='ios'?'🍏':'▶';
+    var t=document.createElement('span');t.className='t';var sm=document.createElement('small'),strong=document.createElement('strong');
+    sm.textContent=s.live?'Download on the '+s.store:'Join the test on '+s.name;strong.textContent=s.live?s.store:(k==='ios'?'TestFlight':'Google Play testing');
+    t.appendChild(sm);t.appendChild(strong);var go=document.createElement('span');go.className='go';go.setAttribute('aria-hidden','true');go.textContent='›';
+    a.appendChild(ico);a.appendChild(t);a.appendChild(go);get.appendChild(a)});
+  note.textContent=anyLive?'':'Testing is invite-only for now. iPhone: install TestFlight from the App Store first. Android: you need to be on the tester list.';
+})();
+</script>
+
+</body>
+</html>
