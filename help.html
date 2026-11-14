@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Help · Golf Stats Tracker</title>
+<meta name="description" content="How to use Golf Stats Tracker: entering rounds, tee boxes, 9 + 9 rounds, Stableford, trophies, Eclectic medals and backups.">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap">
+<style>
+:root{--pine:#16261E;--pine-2:#1E3329;--line:#2F4A3C;--leaf:#4FB67F;--chalk:#EAF0E4;--mist:#A9BDB0;--flag:#E8B422;
+  --body:"Bricolage Grotesque",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color-scheme:dark}
+html{background:var(--pine);scroll-behavior:smooth}
+body{margin:0;background:var(--pine);color:var(--chalk);font-family:var(--body);font-size:17px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px}
+.wrap{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+a{color:var(--leaf)}a:focus-visible{outline:3px solid var(--flag);outline-offset:2px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--chalk)}
+.brand img{width:48px;height:48px;border-radius:12px;box-shadow:0 0 0 1px var(--line)}
+.brand b{font-size:20px;font-weight:800}
+h1{font-size:clamp(28px,7vw,38px);line-height:1.1;margin:8px 0 0;letter-spacing:-.02em;font-weight:800}
+.lead{color:var(--mist);margin:0}
+.toc{margin:0;padding:12px 16px 12px 34px;background:var(--pine-2);border:1.5px solid var(--line);border-radius:14px;columns:2;column-gap:24px;font-size:15px}
+.toc li{break-inside:avoid;margin:3px 0}
+@media (max-width:480px){.toc{columns:1}}
+.card{background:var(--pine-2);border:1.5px solid var(--line);border-radius:16px;padding:16px 18px;scroll-margin-top:16px}
+.card h2{font-size:20px;margin:0 0 6px;font-weight:800}
+.card p{margin:8px 0}
+.card b{color:#fff;font-weight:700}
+footer{font-size:14px;color:var(--mist);text-align:center;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="brand" href="./"><img src="icon-180.png" alt=""><b>Golf Stats Tracker</b></a>
+  <h1>How it works</h1>
+  <p class="lead">Quick answers for scoring rounds, setting up courses and reading your stats. In the app, tap the <b>?</b> next to the title for the same help.</p>
+  <ol class="toc"><li><a href="#entering-a-round">Entering a round</a></li><li><a href="#courses-and-tee-boxes">Courses and tee boxes</a></li><li><a href="#course-library">Course library</a></li><li><a href="#9-9-rounds">9 + 9 rounds</a></li><li><a href="#handicap-shots-and-stableford">Handicap, Shots and Stableford</a></li><li><a href="#stats">Stats</a></li><li><a href="#trophies-and-eclectic-medals">Trophies and Eclectic medals</a></li><li><a href="#backups-and-your-coach">Backups and your coach</a></li><li><a href="#free-rounds-and-unlocking">Free rounds and unlocking</a></li></ol>
+<section class="card" id="entering-a-round"><h2>Entering a round</h2><p>Pick the course, date and <b>9 holes</b>, <b>18 holes</b> or <b>9 + 9</b>, then tap <b>Done</b>. Your next round starts at the last course you played.</p><p><b>Full entry</b> has a card for each part of the hole: tee shot, approach, chipping, then putts and score. Each card turns green with a tick when it’s done. <b>Quick</b> entry asks only for score, putts, fairway and green.</p><p>Tap <b>Next</b> to move on. On the last hole it becomes <b>Save round</b>. Use <b>Picked up</b> if you didn’t finish a hole, <b>Clear hole</b> if you scored the wrong one, and <b>Undo</b> at the bottom to step back.</p></section>
+<section class="card" id="courses-and-tee-boxes"><h2>Courses and tee boxes</h2><p>Each course keeps its par and stroke index (SI) for every tee box: Black, Blue, White, Red and Yellow. Pick your tee under the course name. A tee you haven’t set up yet starts as a copy of your first tee.</p><p>To change a course’s par or SI, tap <b>More options</b> then <b>Edit pars &amp; SI</b>.</p></section>
+<section class="card" id="course-library"><h2>Course library</h2><p>Tap <b>Find a course online</b> to search courses other golfers have shared and import one with all its tee boxes. You can share courses you’ve set up, report a problem with one, or send a tee you’ve added (under More options). Only the course details are shared, never your scores.</p></section>
+<section class="card" id="9-9-rounds"><h2>9 + 9 rounds</h2><p>Play two 9-hole courses as one 18, such as Cootha then City. Tap <b>9 + 9</b>, pick the front 9 and back 9 and a tee for each.</p><p><b>Harder 9</b>: the harder 9 gets the odd stroke indexes (1, 3, 5…) and the other gets the even ones, so handicap shots go to the right holes. Check the club scorecard if you’re not sure.</p><p>Each 9 counts towards its own Eclectic medal and 9-hole records, and the whole round counts as an 18.</p></section>
+<section class="card" id="handicap-shots-and-stableford"><h2>Handicap, Shots and Stableford</h2><p>Enter your daily handicap in <b>Hcp</b>. For 9-hole rounds, use your 9-hole handicap. Once every hole has a stroke index, each hole shows a <b>Shots</b> box: the handicap shots you get there.</p><p>Your net score is strokes minus shots. Stableford points: 2 for a net par, 3 for a net birdie, 1 for a net bogey, and so on.</p></section>
+<section class="card" id="stats"><h2>Stats</h2><p><b>Overview</b> shows where you’re losing shots and what to practise. <b>Long game</b> covers tee shots and approaches, and <b>Short game</b> covers chipping and putting. Filter by course or date at the top. The <b>Holes</b> tab shows how you play each hole.</p></section>
+<section class="card" id="trophies-and-eclectic-medals"><h2>Trophies and Eclectic medals</h2><p>The Trophy cabinet keeps your personal records, such as best score, fewest putts and longest par streak. Beat one and you win a trophy when you save the round.</p><p><b>Eclectic</b> is your best score on each hole at a course, across every round there. Bogey or better on every hole earns <b>Bronze</b>, par <b>Silver</b>, birdie <b>Gold</b> and eagle <b>Platinum</b>. The grid shows which holes you still need.</p></section>
+<section class="card" id="backups-and-your-coach"><h2>Backups and your coach</h2><p>Your rounds are kept only on this phone. In <b>History</b>, tap <b>Export backup</b> now and then and save the file somewhere safe. Use <b>Import file</b> to restore it, or to move to a new phone.</p><p><b>Export CSV</b> opens in a spreadsheet. The coach report (on Stats) makes a tidy PDF to send your coach before a lesson.</p></section>
+<section class="card" id="free-rounds-and-unlocking"><h2>Free rounds and unlocking</h2><p>Your first 3 rounds are free. After that, a one-time purchase of A$4.99 unlocks the app for good, with no subscription and no ads. On a new phone, tap <b>Restore purchase</b>.</p></section>
+  <footer><a href="./">Back to Golf Stats Tracker</a> · Made in Brisbane by Kifty Productions</footer>
+</div>
+</body>
+</html>
