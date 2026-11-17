@@ -41,6 +41,7 @@ th,td{text-align:left;vertical-align:top;padding:8px 6px;border-bottom:1px solid
 th{color:var(--mist);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.06em}
 .scroll{overflow-x:auto}
 footer{font-size:13px;color:var(--mist);text-align:center}
+.nav{display:flex;gap:8px}.nav a{box-sizing:border-box;flex:1 1 0;display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:8px 10px;border:1.5px solid #2F4A3C;border-radius:12px;background:#1E3329;color:#EAF0E4;text-decoration:none;font-weight:600;font-size:16px;line-height:1.2}.nav a:hover{border-color:#4FB67F}.nav a:focus-visible{outline:3px solid #E8B422;outline-offset:2px}.nav a[aria-current=page]{background:#2F8A5B;border-color:#4FB67F}
 </style>
 </head>
 <body>
@@ -50,6 +51,7 @@ footer{font-size:13px;color:var(--mist);text-align:center}
     <span>Golf Stats Tracker</span>
   </a>
 
+  <nav class="nav" aria-label="Site"><a href="./">Home</a><a href="help">Help</a><a href="privacy" aria-current="page">Privacy</a></nav>
   <div>
     <h1>Privacy policy</h1>
     <p class="upd">Last updated 12 November 2026</p>

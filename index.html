@@ -51,7 +51,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(30px,8vw,38px);lin
 .medals{display:flex;gap:8px;flex-wrap:wrap}
 .medals span{font-size:14px;border:1px solid var(--line);border-radius:999px;padding:3px 10px;background:rgba(0,0,0,.18)}
 ul.feat{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
-ul.feat li{display:grid;grid-template-columns:22px 1fr;gap:8px;font-size:16px}
+ul.feat li{display:grid;grid-template-columns:14px 1fr;gap:8px;font-size:16px}ul.feat b{color:var(--chalk)}
 ul.feat li::before{content:"";width:10px;height:10px;margin-top:8px;border-radius:50%;background:var(--leaf)}
 .price{display:flex;gap:10px;flex-wrap:wrap}
 .price div{flex:1 1 120px;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px}
@@ -59,6 +59,7 @@ ul.feat li::before{content:"";width:10px;height:10px;margin-top:8px;border-radiu
 .price span{font-size:13px;color:var(--mist)}
 footer{font-size:13px;color:var(--mist);text-align:center}
 @media (prefers-reduced-motion:reduce){.btn{transition:none}}
+.nav{display:flex;gap:8px}.nav a{box-sizing:border-box;flex:1 1 0;display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:8px 10px;border:1.5px solid #2F4A3C;border-radius:12px;background:#1E3329;color:#EAF0E4;text-decoration:none;font-weight:600;font-size:16px;line-height:1.2}.nav a:hover{border-color:#4FB67F}.nav a:focus-visible{outline:3px solid #E8B422;outline-offset:2px}.nav a[aria-current=page]{background:#2F8A5B;border-color:#4FB67F}
 </style>
 <style>*{box-sizing:border-box}body{margin:0}</style>
 </head>
@@ -70,13 +71,14 @@ footer{font-size:13px;color:var(--mist);text-align:center}
     <h1>Golf Stats Tracker</h1>
   </div>
 
+  <nav class="nav" aria-label="Site"><a href="./" aria-current="page">Home</a><a href="help">Help</a><a href="privacy">Privacy</a></nav>
+
   <p class="tag">Find out where you&rsquo;re really losing shots. <b>No ads, no subscription.</b></p>
 
   <span class="pill" id="status">Coming soon to the stores</span>
 
   <div class="get" id="get"></div>
   <p class="note" id="getnote"></p>
-  <p class="note" style="margin-top:-2px"><a href="help" style="color:var(--leaf);font-weight:600">How the app works →</a></p>
 
   <div class="card" aria-label="Example from the app">
     <h2>Where you lose shots <span style="text-transform:none;letter-spacing:0">(example)</span></h2>
@@ -86,16 +88,21 @@ footer{font-size:13px;color:var(--mist);text-align:center}
     <p class="note">Shots lost per 18 holes, worked out from your own rounds, with tips on what to practise.</p>
   </div>
 
-  <ul class="feat">
-    <li>Log a hole in seconds: tee shot, approach, chip and putts, or quick entry.</li>
-    <li>Already use MiScore, Arccos or Garmin Golf? Import your rounds from a screenshot, with no retyping.</li>
-    <li>Stableford points, fairways, greens in regulation, up and downs and putts.</li>
-    <li>Can’t be bothered entering stats? Just your scores still give you Eclectic medals, Stableford points and trophies.</li>
-    <li>Share your round as a scorecard picture with your golfing mates.</li>
-    <li>Trophies for personal bests, plus Eclectic medals for every course you play.</li>
-    <li>Send your coach a tidy PDF report before your next lesson.</li>
-    <li>Works offline on the course. Your rounds stay on your phone.</li>
-  </ul>
+  <div class="card">
+    <h2>What you get</h2>
+    <ul class="feat">
+      <li><span><b>Import from MiScore, Arccos or Garmin Golf.</b> Screenshot your scorecard and the app reads it. No retyping.</span></li>
+      <li><span><b>Scores only? That&rsquo;s fine.</b> Your Eclectic medals, Stableford points and trophies are worked out for you.</span></li>
+      <li><span><b>Built for Australian golf.</b> Daily handicap shots by stroke index, Stableford, net scores, 9-hole comps and 9&nbsp;+&nbsp;9 courses like Indooroopilly West.</span></li>
+      <li><span><b>Log a hole in seconds.</b> Choose Quick (score, fairway, green, putts) or Full (adds clubs, approach and chipping).</span></li>
+      <li><span><b>Find your course online</b> with par and stroke index for every tee box already filled in.</span></li>
+      <li><span><b>See where you lose shots:</b> fairways, greens in regulation, up and downs and putts, with tips on what to practise.</span></li>
+      <li><span><b>Trophy cabinet</b> with personal bests for 9 and 18 holes, plus Eclectic medals for every course you play.</span></li>
+      <li><span><b>Share your round</b> as a scorecard picture with your golfing mates.</span></li>
+      <li><span><b>Seasons</b> so your stats start fresh each year, and a tidy PDF report for your coach.</span></li>
+      <li><span><b>Private.</b> No account, no ads, no tracking. Works offline and your rounds stay on your phone.</span></li>
+    </ul>
+  </div>
 
   <div class="card">
     <h2>Eclectic medals</h2>
