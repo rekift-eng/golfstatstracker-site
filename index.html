@@ -75,7 +75,7 @@ footer{font-size:13px;color:var(--mist);text-align:center}
 
   <p class="tag">Find out where you&rsquo;re really losing shots. <b>No ads, no subscription.</b></p>
 
-  <span class="pill" id="status">Coming soon to the stores</span>
+  <span class="pill" id="status">Available now</span>
 
   <div class="get" id="get"></div>
   <p class="note" id="getnote"></p>
@@ -121,8 +121,8 @@ footer{font-size:13px;color:var(--mist);text-align:center}
 <script>
 // Store links. When a store listing goes public, set its "live" to true.
 var STORES={
-  ios:{live:false,url:'https://apps.apple.com/app/id6832140886',test:'https://testflight.apple.com/join/cRTyP8GH',name:'iPhone',store:'App Store',ico:''},
-  android:{live:false,url:'https://play.google.com/store/apps/details?id=com.kiftyproductions.golfscorecard',test:'https://play.google.com/apps/testing/com.kiftyproductions.golfscorecard',name:'Android',store:'Google Play',ico:'▶'}
+  ios:{live:true,url:'https://apps.apple.com/app/id6832140886',test:'https://testflight.apple.com/join/cRTyP8GH',name:'iPhone',store:'App Store',ico:''},
+  android:{live:true,url:'https://play.google.com/store/apps/details?id=com.kiftyproductions.golfscorecard',test:'https://play.google.com/apps/testing/com.kiftyproductions.golfscorecard',name:'Android',store:'Google Play',ico:'▶'}
 };
 (function(){
   var ua=navigator.userAgent||'',isIOS=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&'ontouchend' in document),isAnd=/Android/.test(ua);
