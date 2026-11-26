@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="referrer" content="no-referrer">
+<title>Course Library Admin</title>
+<style>
+/* Golf Stats Tracker brand greens; light and dark follow the computer's setting. */
+:root{--bg:#F3F6F0;--card:#FFFFFF;--ink:#16261E;--muted:#5D6F64;--line:#D6DED3;--accent:#1F6B45;--accent-ink:#FFFFFF;--good:#1F6B45;--bad:#B4412F;--chg:#FFF1C9;--chg-ink:#5A4300;--soft:#EAF0E4;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#101A15;--card:#16261E;--ink:#EAF0E4;--muted:#A9BDB0;--line:#2F4A3C;--accent:#4FB67F;--accent-ink:#0E1A13;--good:#4FB67F;--bad:#E07A5F;--chg:#4A3B0E;--chg-ink:#FFE7A3;--soft:#1E3329;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:960px;margin:0 auto;padding:24px 16px 60px}
+header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+header h1{font-size:24px;margin:0;flex:1;min-width:220px;letter-spacing:-.01em}
+header .who{color:var(--muted);font-size:14px}
+button{font:inherit;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 14px;cursor:pointer;min-height:40px}
+button:hover{border-color:var(--accent)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+button.warn{color:var(--bad)}
+button:disabled{opacity:.5;cursor:default}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+h2{font-size:15px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:28px 0 10px}
+h3{margin:0;font-size:19px}
+.sub{color:var(--muted);font-size:14px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tee{display:inline-flex;align-items:center;gap:6px;font-weight:600;margin:12px 0 6px}
+.dot{width:13px;height:13px;border-radius:50%;box-shadow:0 0 0 1.5px var(--line);display:inline-block}
+.tbl{overflow-x:auto;margin-bottom:6px}
+table{border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:14px}
+th,td{padding:4px 7px;text-align:center;border-bottom:1px solid var(--line);min-width:30px}
+th:first-child,td:first-child{text-align:left;color:var(--muted);font-weight:600;white-space:nowrap}
+td.chg{background:var(--chg);color:var(--chg-ink);font-weight:700;border-radius:4px}
+.badge{display:inline-block;font-size:13px;padding:2px 9px;border-radius:999px;background:var(--soft);color:var(--ink);margin-left:6px;vertical-align:2px}
+.empty{color:var(--muted);padding:6px 2px}
+.note{background:var(--soft);border-radius:10px;padding:8px 12px;margin:8px 0;white-space:pre-wrap}
+.msg{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:15px;max-width:90vw;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.err{color:var(--bad);margin-top:10px}
+form{max-width:360px}
+label{display:block;font-size:14px;color:var(--muted);margin:12px 0 4px}
+input{font:inherit;width:100%;padding:9px 11px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.legend{font-size:13px;color:var(--muted);margin-top:4px}
+.legend span{background:var(--chg);color:var(--chg-ink);padding:0 6px;border-radius:4px;font-weight:700}
+.btnlink{display:inline-flex;align-items:center;padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;color:inherit;text-decoration:none;font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+// Course library admin for Golf Stats Tracker. Uses the app's publishable key plus Rob's own sign-in;
+// the database only lets accounts listed in public.admins use the admin_* functions.
+var BASE='https://brwmdixipcelozhwquve.supabase.co',KEY='sb_publishable_FAaWuNVNFYhinSYNIZ-xog_KNxr93zI';
+var TEES=['Black','Blue','White','Red','Yellow'],COL={Black:'#1d1d1d',Blue:'#1f5fbf',White:'#ffffff',Red:'#c8352b',Yellow:'#e8b422'};
+var REASONS={wrong_par:'Wrong par',wrong_si:'Wrong stroke index',duplicate:'It’s a duplicate',not_real:'Not a real course',differs:'Differs from scorecard',other:'Something else'};
+var A={sess:null,tees:null,reps:null,hid:null,busy:{},err:'',loading:false};
+function esc(x){return String(x==null?'':x).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function ss(k,v){try{if(v===undefined)return sessionStorage.getItem(k);if(v===null)sessionStorage.removeItem(k);else sessionStorage.setItem(k,v)}catch(e){return null}}
+function toast(t){var d=document.createElement('div');d.className='msg';d.setAttribute('role','status');d.textContent=t;document.body.appendChild(d);setTimeout(function(){d.remove()},3500)}
+function when(t){var d=new Date(t);return d.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'})+' '+d.toLocaleTimeString('en-AU',{hour:'numeric',minute:'2-digit'})}
+
+function auth(body,grant){return fetch(BASE+'/auth/v1/token?grant_type='+grant,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error_description||j.msg||j.message||('Sign-in failed ('+r.status+')'));return j})})}
+function keep(j){A.sess={at:j.access_token,rt:j.refresh_token,exp:Date.now()+(j.expires_in||3600)*1000-60000,email:(j.user&&j.user.email)||(A.sess&&A.sess.email)||''};ss('gst-admin',JSON.stringify(A.sess))}
+function token(){if(!A.sess)return Promise.reject(new Error('Signed out'));if(Date.now()<A.sess.exp)return Promise.resolve(A.sess.at);return auth({refresh_token:A.sess.rt},'refresh_token').then(function(j){keep(j);return j.access_token})}
+function rpc(fn,args){return token().then(function(t){return fetch(BASE+'/rest/v1/rpc/'+fn,{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+t,'Content-Type':'application/json'},body:JSON.stringify(args||{})})}).then(function(r){return r.text().then(function(t){var j=null;try{j=t?JSON.parse(t):null}catch(e){}if(!r.ok)throw new Error((j&&j.message)||('Error '+r.status));return j})})}
+
+function load(){A.loading=true;A.err='';render();Promise.all([rpc('admin_pending_tee_updates'),rpc('admin_open_reports'),rpc('admin_hidden_courses')]).then(function(r){A.tees=r[0]||[];A.reps=r[1]||[];A.hid=r[2]||[];A.loading=false;render();loadFb()},function(e){A.loading=false;A.err=/Not an admin/.test(e.message)?'This account isn’t an admin yet. Run step 2 in 2026-11-admin.sql (the insert into public.admins) with this email, then press Refresh.':e.message;render()})}
+
+function grid(holes,rows){var h='<tr><th>Hole</th>';for(var i=0;i<holes;i++)h+='<th>'+(i+1)+'</th>';h+='</tr>';rows.forEach(function(r){h+='<tr><td>'+esc(r.label)+'</td>';for(var i=0;i<holes;i++){var v=r.v?r.v[i]:null,c=r.cmp&&r.cmp[i]!=v;h+='<td'+(c?' class="chg" title="Was '+esc(r.cmp[i])+'"':'')+'>'+(v==null?'–':esc(v))+'</td>'}h+='</tr>'});return '<div class="tbl"><table>'+h+'</table></div>'}
+function teeHead(t,extra){return '<div class="tee"><span class="dot" style="background:'+(COL[t]||'#999')+'"></span>'+esc(t)+' tee'+(extra?' <span class="sub" style="font-weight:400">'+extra+'</span>':'')+'</div>'}
+function teesOf(c){var o={};if(c&&typeof c==='object')TEES.forEach(function(t){if(c[t]&&c[t].par)o[t]=c[t]});return o}
+
+function teeCard(u){var now=teesOf(u.tees_now),nw=teesOf(u.tees_new),b=A.busy[u.update_id],o='<div class="card"><h3>'+esc(u.name)+(u.hidden?'<span class="badge">Hidden</span>':'')+'</h3><div class="sub">'+esc(u.suburb)+(u.state?', '+esc(u.state):'')+' · '+u.holes+' holes · sent '+esc(when(u.created_at))+'</div>';
+  TEES.forEach(function(t){var x=nw[t];if(!x)return;var cur=now[t],base={par:u.men_par,si:u.men_si};
+    if(cur){o+=teeHead(t,'changes the existing '+t+' tee')+grid(u.holes,[{label:'Par now',v:cur.par},{label:'Par new',v:x.par,cmp:cur.par},{label:'SI now',v:cur.si},{label:'SI new',v:x.si,cmp:cur.si}])}
+    else{o+=teeHead(t,'new tee · compared with the main scorecard')+grid(u.holes,[{label:'Par main',v:base.par},{label:'Par new',v:x.par,cmp:base.par},{label:'SI main',v:base.si},{label:'SI new',v:x.si,cmp:base.si}])}});
+  o+='<div class="legend"><span>Highlighted</span> = different from now (hover to see the old number)</div><div class="acts"><button class="on" data-act="approve" data-id="'+esc(u.update_id)+'"'+(b?' disabled':'')+'>Approve</button><button class="warn" data-act="reject" data-id="'+esc(u.update_id)+'"'+(b?' disabled':'')+'>Reject</button></div></div>';return o}
+
+function loadFb(){rpc('admin_feedback',{p_all:!!A.fbAll}).then(function(r){A.fb=r||[];A.fbErr='';render()},function(e){A.fb=null;A.fbErr=/admin_feedback|schema cache|404/.test(e.message)?'Feedback isn’t set up yet: run supabase/2026-11-feedback.sql in the Supabase SQL Editor, then press Refresh.':e.message;render()})}
+var KINDS={idea:'💡 Idea',problem:'🐞 Problem',other:'💬 Other'};
+function fbCard(f){var b=A.busy[f.feedback_id];return '<div class="card"'+(f.resolved?' style="opacity:.6"':'')+'><h3>'+esc(KINDS[f.kind]||f.kind)+(f.resolved?'<span class="badge">Read</span>':'')+'</h3><div class="sub">'+esc(when(f.created_at))+' · app '+esc(f.app_version||'?')+' · '+esc(f.platform||'?')+'</div><div class="note" style="white-space:pre-wrap">'+esc(f.message)+'</div>'+
+  '<div class="acts">'+(f.email?'<a class="btnlink" href="mailto:'+esc(f.email)+'?subject='+encodeURIComponent('Re: your Golf Stats Tracker feedback')+'">Reply to '+esc(f.email)+'</a>':'<span class="sub">No email given</span>')+'<button'+(f.resolved?'':' class="on"')+' data-act="'+(f.resolved?'fbunread':'fbread')+'" data-id="'+esc(f.feedback_id)+'"'+(b?' disabled':'')+'>'+(f.resolved?'Mark as unread':'Mark as read')+'</button></div></div>'}
+
+function repCard(r){var b=A.busy[r.report_id],tl=teesOf(r.tees),names=TEES.filter(function(t){return tl[t]}),o='<div class="card"><h3>'+esc(r.name)+(r.hidden?'<span class="badge">Hidden</span>':'')+(r.open_count>1?'<span class="badge">'+r.open_count+' open reports</span>':'')+'</h3><div class="sub">'+esc(r.suburb)+(r.state?', '+esc(r.state):'')+' · '+r.holes+' holes · reported '+esc(when(r.created_at))+'</div>';
+  o+='<div style="margin-top:8px"><b>'+esc(REASONS[r.reason]||r.reason)+'</b></div>'+(r.note?'<div class="note">'+esc(r.note)+'</div>':'');
+  if(names.length)names.forEach(function(t){o+=teeHead(t)+grid(r.holes,[{label:'Par',v:tl[t].par},{label:'SI',v:tl[t].si}])});else o+='<div class="tee">Main scorecard</div>'+grid(r.holes,[{label:'Par',v:r.men_par},{label:'SI',v:r.men_si}]);
+  o+='<div class="acts"><button class="on" data-act="resolve" data-id="'+esc(r.report_id)+'"'+(b?' disabled':'')+'>Mark as dealt with</button>'+(r.hidden?'<button data-act="show" data-id="'+esc(r.course_id)+'"'+(b?' disabled':'')+'>Show course again</button>':'<button class="warn" data-act="hide" data-id="'+esc(r.course_id)+'"'+(b?' disabled':'')+'>Hide course from library</button>')+'</div><div class="legend">To fix a wrong number, edit the course in Supabase (Table Editor → courses) or ask the golfer to send the tee from the app, then mark this as dealt with.</div></div>';return o}
+
+function render(){var el=document.getElementById('app'),o='';
+  if(!A.sess){o='<header><h1>Course library admin</h1></header><div class="card"><p style="margin-top:0">Sign in with your Golf Stats Tracker admin account (the one you created in Supabase → Authentication).</p><form id="f"><label for="em">Email</label><input id="em" type="email" autocomplete="username" required><label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password" required><div class="acts"><button class="on" type="submit"'+(A.loading?' disabled':'')+'>'+(A.loading?'Signing in…':'Sign in')+'</button></div>'+(A.err?'<div class="err" role="alert">'+esc(A.err)+'</div>':'')+'</form></div>';el.innerHTML=o;var f=document.getElementById('f');f.onsubmit=function(e){e.preventDefault();A.loading=true;A.err='';var em=document.getElementById('em').value.trim(),pw=document.getElementById('pw').value;render();auth({email:em,password:pw},'password').then(function(j){keep(j);A.loading=false;load()},function(x){A.loading=false;A.err=x.message;render();document.getElementById('em').value=em})};return}
+  o='<header><h1>Course library admin</h1><span class="who">'+esc(A.sess.email)+'</span><button data-act="refresh"'+(A.loading?' disabled':'')+'>'+(A.loading?'Loading…':'Refresh')+'</button><button data-act="out">Sign out</button></header>';
+  if(A.err)o+='<div class="card err" role="alert">'+esc(A.err)+'</div>';
+  if(A.fb||A.fbErr){var nNew=A.fb?A.fb.filter(function(f){return !f.resolved}).length:0;o+='<h2>Feedback ('+nNew+' new)</h2>'+(A.fbErr?'<div class="card err">'+esc(A.fbErr)+'</div>':(A.fb.length?A.fb.map(fbCard).join(''):'<div class="empty">No new feedback. Messages sent from the app’s Settings → Send feedback appear here.</div>')+'<div style="margin:-4px 0 14px"><button data-act="fball">'+(A.fbAll?'Hide read messages':'Show read messages too')+'</button></div>')}
+  if(A.tees){o+='<h2>Tee updates waiting ('+A.tees.length+')</h2>'+(A.tees.length?A.tees.map(teeCard).join(''):'<div class="empty">Nothing waiting. When a golfer sends tees from the app, they’ll appear here.</div>');
+    o+='<h2>Problem reports ('+A.reps.length+')</h2>'+(A.reps.length?A.reps.map(repCard).join(''):'<div class="empty">No open reports.</div>');
+    o+='<h2>Hidden courses ('+A.hid.length+')</h2>'+(A.hid.length?'<div class="card">'+A.hid.map(function(h){return '<div class="row" style="justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line)"><div><b>'+esc(h.name)+'</b> <span class="sub">'+esc(h.suburb)+(h.state?', '+esc(h.state):'')+' · '+h.holes+' holes</span></div><button data-act="show" data-id="'+esc(h.course_id)+'"'+(A.busy[h.course_id]?' disabled':'')+'>Show again</button></div>'}).join('')+'</div>':'<div class="empty">None. Courses are hidden automatically after 3 phones report them, or when you hide one.</div>')}
+  el.innerHTML=o}
+
+document.addEventListener('click',function(e){var b=e.target.closest('button[data-act]');if(!b)return;var a=b.dataset.act,id=b.dataset.id;
+  if(a==='refresh')return load();
+  if(a==='fball'){A.fbAll=!A.fbAll;return loadFb()}
+  if(a==='fbread'||a==='fbunread'){A.busy[id]=1;render();return rpc('admin_resolve_feedback',{p_id:id,p_resolved:a==='fbread'}).then(function(){delete A.busy[id];toast(a==='fbread'?'Marked as read.':'Marked as unread.');loadFb()},function(x){delete A.busy[id];A.err=x.message;render()})}
+  if(a==='out'){A.sess=null;A.tees=A.reps=A.hid=A.fb=null;A.fbErr='';ss('gst-admin',null);return render()}
+  var call=a==='approve'?['admin_decide_tee',{p_id:id,p_status:'approved'},'Approved. Phones with this course will be offered the update.']:a==='reject'?['admin_decide_tee',{p_id:id,p_status:'rejected'},'Rejected. Nothing changed in the library.']:a==='resolve'?['admin_resolve_report',{p_id:id},'Marked as dealt with.']:a==='hide'?['admin_set_hidden',{p_course:id,p_hidden:true},'Course hidden from the library.']:a==='show'?['admin_set_hidden',{p_course:id,p_hidden:false},'Course is back in the library.']:null;
+  if(!call)return;A.busy[id]=1;render();rpc(call[0],call[1]).then(function(){delete A.busy[id];toast(call[2]);load()},function(x){delete A.busy[id];A.err=x.message;render()})});
+
+try{var s=JSON.parse(ss('gst-admin')||'null');if(s&&s.at)A.sess=s}catch(e){}
+render();if(A.sess)load();
+</script>
+</body>
+</html>
